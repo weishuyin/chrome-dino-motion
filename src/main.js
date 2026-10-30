@@ -1,3 +1,4 @@
+import { setupGameSpeed } from './speed-control.js';
 import { Runner } from './vendor/chromium/offline.js';
 import { FilesetResolver, PoseLandmarker } from '@mediapipe/tasks-vision';
 import { LearnedJumpDetector } from './learned-jump-detector.js';
@@ -12,10 +13,25 @@ async function main() {
   // Cancel the button's default Space activation without stopping Runner's input.
   for (const type of ['keydown', 'keyup']) {
     document.addEventListener(type, event => {
+      if (event.target.tagName === 'SELECT' || event.target.type === 'checkbox') {
+        event.stopPropagation();
+        return;
+      }
       if (event.code === 'Space' && event.target.closest?.('button')) event.preventDefault();
     }, true);
   }
   const runner = new Runner('#game');
+  let preferences;
+  try { preferences = window.localStorage; } catch {}
+  setupGameSpeed(runner, $('game-speed'), preferences);
+  const invincible = $('invincible');
+  // Default off on every page load; keep the choice across game restarts.
+  invincible.checked = false;
+  runner.invincible = false;
+  invincible.addEventListener('change', () => {
+    runner.invincible = invincible.checked;
+    invincible.blur();
+  });
   // Scale the original 600×150 game as a whole; keep upstream physics and
   // obstacle timing at their original logical resolution.
   const stage = $('stage');
@@ -33,12 +49,14 @@ async function main() {
   // Keep Chromium's own input handling, physics, scoring and rendering intact.
   // A detected body jump is equivalent to holding Space for 180ms.
   function motionJump() {
-    if (!runner.tRex || document.hidden || runner.paused) return;
+    if (!runner.tRex || document.hidden) return;
     const event = type => ({type, keyCode: 32, target: runner.canvas, preventDefault() {}});
     if (runner.crashed) {
+      // gameOver() also sets paused; process crashes before the pause guard.
       runner.onKeyUp(event('keyup'));
       return;
     }
+    if (runner.paused) return;
     runner.onKeyDown(event('keydown'));
     clearTimeout(releaseTimer);
     releaseTimer = setTimeout(() => runner.onKeyUp(event('keyup')), 180);

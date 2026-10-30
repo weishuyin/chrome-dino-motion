@@ -47,6 +47,7 @@ export function Runner(outerContainerId, opt_config) {
 
   this.distanceMeter = null;
   this.distanceRan = 0;
+  this.dayNightDistance = 0;
 
   this.highestScore = 0;
   this.syncHighestScore = false;
@@ -696,6 +697,8 @@ Runner.prototype = {
     this.updatePending = false;
 
     const now = getTimeStamp();
+    // Only the scrolling world uses the selected rate; the dinosaur keeps real time.
+    const scrollRate = this.scrollRate || 1;
     let deltaTime = now - (this.time || now);
 
     // Flashing when switching game modes.
@@ -742,11 +745,11 @@ Runner.prototype = {
         const showNightMode = this.isDarkMode ^ this.inverted;
         deltaTime = !this.activated ? 0 : deltaTime;
         this.horizon.update(
-            deltaTime, this.currentSpeed, hasObstacles, showNightMode);
+            deltaTime * scrollRate, this.currentSpeed, hasObstacles, showNightMode);
       }
 
       // Check for collisions.
-      let collision = hasObstacles &&
+      let collision = !this.invincible && hasObstacles &&
           checkForCollision(this.horizon.obstacles[0], this.tRex);
 
       // For a11y, audio cues.
@@ -782,7 +785,9 @@ Runner.prototype = {
       }
 
       if (!collision) {
-        this.distanceRan += this.currentSpeed * deltaTime / this.msPerFrame;
+        this.distanceRan += this.currentSpeed * deltaTime * scrollRate / this.msPerFrame;
+        // Keep daylight/nightfall on the standard-rate timeline, independent of map speed.
+        this.dayNightDistance += this.currentSpeed * deltaTime / this.msPerFrame;
 
         if (this.currentSpeed < this.config.MAX_SPEED) {
           this.currentSpeed += this.config.ACCELERATION;
@@ -808,7 +813,7 @@ Runner.prototype = {
           this.invertTimer += deltaTime;
         } else {
           const actualDistance =
-              this.distanceMeter.getActualDistance(Math.ceil(this.distanceRan));
+              this.distanceMeter.getActualDistance(Math.ceil(this.dayNightDistance));
 
           if (actualDistance > 0) {
             this.invertTrigger =
@@ -1355,6 +1360,7 @@ Runner.prototype = {
       this.paused = false;
       this.crashed = false;
       this.distanceRan = 0;
+      this.dayNightDistance = 0;
       this.setSpeed(this.config.SPEED);
       this.time = getTimeStamp();
       this.containerEl.classList.remove(Runner.classes.CRASHED);
@@ -2310,7 +2316,7 @@ Obstacle.prototype = {
       if (this.typeConfig.speedOffset) {
         speed += this.speedOffset;
       }
-      this.xPos -= Math.floor((speed * FPS / 1000) * deltaTime);
+      this.xPos -= (speed * FPS / 1000) * deltaTime;
 
       // Update frame
       if (this.typeConfig.numFrames) {
@@ -3785,7 +3791,7 @@ HorizonLine.prototype = {
    * @param {number} speed
    */
   update(deltaTime, speed) {
-    const increment = Math.floor(speed * (FPS / 1000) * deltaTime);
+    const increment = speed * (FPS / 1000) * deltaTime;
 
     if (this.xPos[0] <= 0) {
       this.updateXPos(0, increment);

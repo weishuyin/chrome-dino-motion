@@ -5,6 +5,16 @@
   </div>
   <section aria-label="体感控制">
     <div class="controls">
+      <label>地图速度
+        <select id="game-speed" aria-label="地图速度">
+          <option value="0.1">0.1×</option>
+          <option value="0.25">0.25×</option>
+          <option value="0.5">0.5×</option>
+          <option value="0.75">0.75×</option>
+          <option value="1" selected>1.0× · 标准</option>
+        </select>
+      </label>
+      <label><input id="invincible" type="checkbox">无敌模式</label>
       <button id="camera-start">开启摄像头</button>
       <button id="camera-stop" disabled>关闭摄像头</button>
       <button id="calibrate">重新校准</button>
