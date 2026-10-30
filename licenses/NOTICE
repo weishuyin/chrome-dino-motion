@@ -1,4 +1,5 @@
-Bunny Run code: MIT, copyright 2026 guigulaoshi.
-Original game artwork: CC BY 4.0; see ASSET-LICENSE.
-Three.js and its loaders: MIT; see three-LICENSE.
+Dinosaur game code, sprites and sounds: Chromium Authors, BSD-style license.
+See src/vendor/chromium/LICENSE and src/vendor/chromium/UPSTREAM.md.
+Jump detection code and model retained from Bunny Run by guigulaoshi (MIT).
+See LICENSE and https://github.com/guigulaoshi/bunny-run.
 MediaPipe Tasks Vision and pose landmarker: Apache 2.0; see mediapipe-LICENSE.

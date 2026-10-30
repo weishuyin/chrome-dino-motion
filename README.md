@@ -1,101 +1,50 @@
-<div align="center">
+# Dinosaur · 摄像头体感跑酷
 
-# Bunny Run · 小兔快跑
+## 本地运行
 
-**A little bunny. A field of flowers. One more jump.**<br>
-**穿过花海，跃过仙人掌，再跳一次。**
-
-<p>
-  <a href="https://guigulaoshi.github.io/bunny-run/"><img src="https://img.shields.io/badge/%E2%96%B6%20PLAY%20NOW-%E7%AB%8B%E5%8D%B3%E5%BC%80%E7%8E%A9-568445?style=for-the-badge" alt="Play now · 立即开玩" height="42"></a>
-  <a href="https://guigulaoshi.itch.io/bunny-run"><img src="https://img.shields.io/badge/PLAY%20ON-itch.io-fa5c5c?style=for-the-badge&amp;logo=itchdotio&amp;logoColor=white" alt="Play Bunny Run on itch.io" height="42"></a>
-</p>
-
-Play in your browser · 打开即玩 · No install · 无需安装<br>
-Jump with your body or press **Space** · **体感跳跃 / 空格操作**
-
-<a href="https://guigulaoshi.github.io/bunny-run/"><img src=".github/readme/gameplay.png" alt="Bunny Run: a little white bunny running through a flower meadow beneath forests, green mountains and a glowing sun" width="100%"></a>
-
-</div>
-
-## Hop in · 开始跑吧
-
-A playful 3D endless runner with a springy bunny, floating carrots and branching cacti. Start gently, find your rhythm, and keep up as the meadow rolls by faster.
-
-一只软弹的小兔子，在花海里追逐胡萝卜、跳过仙人掌。从轻松的开场开始，找到节奏，迎接越来越快的挑战。
-
-| | Keyboard · 键盘 | Camera · 体感 |
-|---|---|---|
-| **Start · 开始** | Press Space · 按空格 | Jump once · 原地跳一次 |
-| **Jump · 跳跃** | Press Space · 按空格 | Jump in place · 原地起跳 |
-| **Try again · 重来** | Press Space after a fall · 摔倒后按空格 | Jump once after a fall · 摔倒后跳一次 |
-
-**No camera? No problem.** Space works on its own. For motion play, use an ordinary webcam, allow camera access and stand still briefly to calibrate. Your head or upper body can be enough; your feet do not need to be visible. Choose a clear space to move.
-
-**没有摄像头也能玩。** 直接按空格即可。体感模式使用普通摄像头，授权后短暂站稳完成校准；头部或上半身入镜即可，不要求拍到脚。请在开阔的位置活动。
-
-## Little jumps, bright rewards · 每一跳都有惊喜
-
-<table>
-<tr>
-<td width="63%" valign="top">
-
-### 🥕 Catch a carrot · 吃颗胡萝卜
-
-One carrot, one star. Miss one and keep running.<br>
-吃到一颗加一星，错过也不会失败。
-
-### ⭐ Time your jump · 跳得刚刚好
-
-Clear a cactus for stars. Larger obstacles and a well-centered jump earn more.<br>
-越过仙人掌获得星星，障碍大小和起跳时机决定奖励。
-
-### 🌼 A moving miniature world · 会呼吸的小世界
-
-Flowers, layered forests, rolling hills, drifting clouds and sunlight that changes the shadows.<br>
-花海、层叠树林、起伏远山，还有会遮住阳光的流云。
-
-### 🐰 Share your best · 分享最好成绩
-
-Save a picture of your best score, featuring the bunny and scenery from the game.<br>
-把最好成绩变成一张图片，带上游戏里的兔子和风景。
-
-</td>
-<td width="37%" align="center" valign="middle">
-<img src=".github/readme/share-card.png" alt="Example of the Chinese best-score share card, featuring the game's bunny, cacti and meadow" width="100%"><br>
-<sub>In-game share card · 游戏内分享卡示例</sub>
-</td>
-</tr>
-</table>
-
-English and Chinese follow your browser language, with a manual switch. Camera processing stays on your device; no microphone is needed.
-
-中英文默认跟随浏览器，也可以手动切换。摄像头画面仅在本机处理，不需要麦克风。
-
-<details>
-<summary><b>Run locally · 本地运行</b></summary>
-
-Use Node.js 22 or newer. / 使用 Node.js 22 或更新版本。
+需要 Node.js 22 或更新版本。
 
 ```sh
+cd ~/Downloads/chrome-dino-motion
 npm ci
 npm run dev
 ```
 
-To build the static game: / 生成静态游戏：
+打开终端显示的地址，默认是 http://127.0.0.1:5173/ 。按 `Ctrl+C` 停止服务。
+
+首次安装依赖时会自动准备 MediaPipe WASM 文件，识别模型已包含在项目中。
+
+## 游戏操作
+
+- **空格 / ↑**：开始、跳跃；游戏结束后重来。
+- **↓**：蹲下。
+- **体感跳跃**：点击“开启摄像头”并允许访问，让头部或肩膀入镜，站稳片刻完成校准，然后原地跳跃。
+- **灵敏度与校准**：通过滑块调整灵敏度，点击“重新校准”重新准备识别。
+- 摄像头和键盘可以同时使用；关闭摄像头后仍可通过键盘操作。
+- 最高分保存在当前浏览器中。
+
+## 构建与预览
 
 ```sh
 npm run build
+npm run preview
 ```
 
-</details>
+构建结果位于 `dist/`，预览地址默认为 http://127.0.0.1:4173/ 。修改源码后需重新构建。
 
-## Use it, make it yours · 欢迎使用和改编
+## 发布
 
-Code: [MIT](LICENSE). Original artwork: [CC BY 4.0](ASSET-LICENSE). You may use and adapt them, including commercially, with the required attribution and license notices. Third-party assets retain their own licenses; see [notices](licenses/NOTICE).
+将 `dist/` 中的全部内容上传到静态网站托管服务，使 `index.html` 位于网站根目录。保留 `assets/`、`models/` 和 `vendor/` 的完整目录结构。
 
-代码使用 MIT 许可，原创美术使用 CC BY 4.0。欢迎使用、修改和商用，请按许可保留署名及许可声明。第三方资源遵循各自许可。
+更新网站时，重新执行 `npm run build`，再上传新的构建结果。
 
-<p align="center">
-  <b>Made by <a href="https://github.com/guigulaoshi">guigulaoshi</a></b><br>
-  <a href="https://guigulaoshi.github.io/bunny-run/">Play Bunny Run · 开始游戏</a> · <a href="https://guigulaoshi.itch.io">More games · 更多游戏</a>
-</p>
+### GitHub Pages 自动发布
+
+项目已包含 GitHub Pages 部署工作流：
+
+1. 将项目源码上传到自己的 GitHub 仓库，保留 `.github/` 目录，不上传 `node_modules/` 和 `dist/`。
+2. 在仓库 `Settings → Pages → Source` 中选择 `GitHub Actions`。
+3. 推送到 `main` 分支，或在 Actions 页面手动运行 `Deploy game`。
+4. 部署成功后，从 Pages 设置或工作流结果打开网站地址。
+
+如果使用其他默认分支，需要同步修改工作流中的分支配置。后续推送会自动构建并更新网站。
